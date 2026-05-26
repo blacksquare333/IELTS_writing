@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+      <title>IELTS Writing Assistant</title>
+</head>
+<body>
+
+    <h1>IELTS Writing Assistant</h1>
+
+    <form id="essayForm">
+        <p>
+            <label>Your Essay</label><br>
+            <textarea id="original_essay" rows="10" cols="60"></textarea>
+        </p>
+        <p>
+            <label>Target IELTS Level:</label>
+            <input type="text" id="IELTS_level" placeholder="eg.6">
+        </p>
+        <button type="submit">Get feedback</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById("essayForm").addEventListener('submit', function(e) {e.preventDefault();
+
+            const essay = document.getElementById('original_essay').value;
+            const level = document.getElementById('IELTS_level').value;
+
+            document.getElementById('result').innerHTML = 'Analyzing...';
+
+            if (!essay || !level) {
+    document.getElementById('result').innerHTML = 'Please fill in both fields.';
+    return;
+}
+
+            fetch('https://ieltswriting-production-ee8f.up.railway.app/revised_essay',{
+                method:'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({
+                    original_essay: essay,
+                    IELTS_level: level,
+                    })
+            })
+        .then(response => response.json())
+        .then(data =>{
+            document.getElementById('result').innerHTML =
+            '<h2>Feedback:</h2><pre>' + data.revised_essay + '</pre>';
+        });
+    });
+    </script>
+</body>
+</html>
+
