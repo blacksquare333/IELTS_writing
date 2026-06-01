@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,send_from_directory
 from flask_cors import CORS
 from supabase import create_client
 from dotenv import load_dotenv
@@ -15,6 +15,9 @@ SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase_client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+@app.route("/")
+def index():
+    return send_from_directory(".","index.html")
 @app.route("/revised_essay", methods=["POST"])
 def generate_revised_essay():
     data=request.get_json()
@@ -55,4 +58,5 @@ def generate_revised_essay():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=5000,debug=False)
+    port = int(os.environ.get("PORT",5000))
+    app.run(host="0.0.0.0",port=port,debug=False)
