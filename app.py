@@ -10,7 +10,7 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase_client = create_client(SUPABASE_URL, SUPABASE_KEY)
@@ -28,14 +28,14 @@ def generate_revised_essay():
     prompt = f"please check the {original_essay} grammar and spelling and provide a revised version depending on the  IELTS_level : {IELTS_level}"
 
     response = requests.post(
-    "https://openrouter.ai/api/v1/chat/completions",
+    "https://api.deepseek.com/v1/chat/completions",
     headers={
-    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+    "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
     "Content-Type": "application/json"
     },
 
     json={
-    "model": "anthropic/claude-3-haiku",
+    "model": "deepseek-chat",
     "messages":[{"role": "user", "content": prompt}]
     }
 )
